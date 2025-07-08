@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import { useDatabase } from './hooks/useDatabase';
 import { Toolbar } from './components/Toolbar/Toolbar';
 import { DatabaseFlow } from './components/Flow/DatabaseFlow';
@@ -6,6 +6,7 @@ import { PropertyPanel } from './components/PropertyPanel/PropertyPanel';
 import { JSONEditor } from './components/JSONEditor/JSONEditor';
 import { ExportPanel } from './components/ExportPanel/ExportPanel';
 import { DatabaseEngine } from './types/database';
+import {ChatAI} from "./components/Chat/ChatAI.tsx";
 
 function App() {
   const {
@@ -31,6 +32,7 @@ function App() {
   const [showJSONEditor, setShowJSONEditor] = useState(false);
   const [showExportPanel, setShowExportPanel] = useState(false);
   const [showPropertyPanel, setShowPropertyPanel] = useState(false);
+  const [showChatAI, setShowChatAI] = useState(false);
 
   const handleAddTable = useCallback(() => {
     // Add table at center of viewport
@@ -101,66 +103,74 @@ function App() {
   }, [schema]);
 
   return (
-    <div className="h-screen flex flex-col bg-gray-100">
-      <Toolbar
-        onAddTable={handleAddTable}
-        onImport={handleImport}
-        onExport={handleExport}
-        onShowJSON={() => setShowJSONEditor(true)}
-        onShowSQL={() => setShowExportPanel(true)}
-        onUndo={undo}
-        onRedo={redo}
-        canUndo={canUndo}
-        canRedo={canRedo}
-        databaseEngine={schema.database.engine}
-        onEngineChange={handleEngineChange}
-      />
-
-      <div className="flex-1 flex">
-        <DatabaseFlow
-          schema={schema}
-          onTableUpdate={updateTable}
-          onColumnUpdate={updateColumn}
-          onAddColumn={addColumn}
-          onDeleteColumn={deleteColumn}
-          onAddRelationship={addRelationship}
-          onUpdateRelationship={updateRelationship}
-          onTablePositionChange={updateTablePosition}
-          onTableSelect={handleTableSelect}
-          onColumnSelect={handleColumnSelect}
-          onRelationshipSelect={handleRelationshipSelect}
+      <div className="h-screen flex flex-col bg-gray-100">
+        <Toolbar
+            onAddTable={handleAddTable}
+            onImport={handleImport}
+            onExport={handleExport}
+            onShowJSON={() => setShowJSONEditor(true)}
+            onShowSQL={() => setShowExportPanel(true)}
+            onShowChatAI={() => setShowChatAI(true)}
+            onUndo={undo}
+            onRedo={redo}
+            canUndo={canUndo}
+            canRedo={canRedo}
+            databaseEngine={schema.database.engine}
+            onEngineChange={handleEngineChange}
         />
 
-        {showPropertyPanel && (
-          <PropertyPanel
-            schema={schema}
-            onUpdateTable={updateTable}
-            onUpdateColumn={updateColumn}
-            onAddColumn={addColumn}
-            onDeleteColumn={deleteColumn}
-            onDeleteTable={deleteTable}
-            onUpdateRelationship={updateRelationship}
-            onDeleteRelationship={deleteRelationship}
-            onClose={() => setShowPropertyPanel(false)}
+        <div className="flex-1 flex">
+          <DatabaseFlow
+              schema={schema}
+              onTableUpdate={updateTable}
+              onColumnUpdate={updateColumn}
+              onAddColumn={addColumn}
+              onDeleteColumn={deleteColumn}
+              onAddRelationship={addRelationship}
+              onUpdateRelationship={updateRelationship}
+              onTablePositionChange={updateTablePosition}
+              onTableSelect={handleTableSelect}
+              onColumnSelect={handleColumnSelect}
+              onRelationshipSelect={handleRelationshipSelect}
           />
+
+          {showPropertyPanel && (
+              <PropertyPanel
+                  schema={schema}
+                  onUpdateTable={updateTable}
+                  onUpdateColumn={updateColumn}
+                  onAddColumn={addColumn}
+                  onDeleteColumn={deleteColumn}
+                  onDeleteTable={deleteTable}
+                  onUpdateRelationship={updateRelationship}
+                  onDeleteRelationship={deleteRelationship}
+                  onClose={() => setShowPropertyPanel(false)}
+              />
+          )}
+
+          {showChatAI && (
+              <ChatAI
+                  schema={schema}
+                  onClose={() => setShowChatAI(false)}
+              />
+          )}
+        </div>
+
+        {showJSONEditor && (
+            <JSONEditor
+                schema={schema}
+                onImport={importSchema}
+                onClose={() => setShowJSONEditor(false)}
+            />
+        )}
+
+        {showExportPanel && (
+            <ExportPanel
+                schema={schema}
+                onClose={() => setShowExportPanel(false)}
+            />
         )}
       </div>
-
-      {showJSONEditor && (
-        <JSONEditor
-          schema={schema}
-          onImport={importSchema}
-          onClose={() => setShowJSONEditor(false)}
-        />
-      )}
-
-      {showExportPanel && (
-        <ExportPanel
-          schema={schema}
-          onClose={() => setShowExportPanel(false)}
-        />
-      )}
-    </div>
   );
 }
 

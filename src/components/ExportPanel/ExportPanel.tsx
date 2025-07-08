@@ -54,55 +54,55 @@ export const ExportPanel: React.FC<ExportPanelProps> = ({
             <h2 className="text-lg font-semibold text-gray-800">Export Schema</h2>
             <div className="flex bg-gray-100 rounded-lg p-1">
               <button
-                onClick={() => setActiveTab('sql')}
-                className={`px-3 py-1 rounded text-sm font-medium transition-colors ${
-                  activeTab === 'sql' 
-                    ? 'bg-white text-blue-600 shadow-sm' 
-                    : 'text-gray-600 hover:text-gray-800'
-                }`}
+                  onClick={() => setActiveTab('sql')}
+                  className={`px-3 py-1 rounded text-sm font-medium transition-colors ${
+                      activeTab === 'sql'
+                          ? 'bg-white text-blue-600 shadow-sm'
+                          : 'text-gray-600 hover:text-gray-800'
+                  }`}
               >
                 SQL DDL
               </button>
               <button
-                onClick={() => setActiveTab('json')}
-                className={`px-3 py-1 rounded text-sm font-medium transition-colors ${
-                  activeTab === 'json' 
-                    ? 'bg-white text-blue-600 shadow-sm' 
-                    : 'text-gray-600 hover:text-gray-800'
-                }`}
+                  onClick={() => setActiveTab('json')}
+                  className={`px-3 py-1 rounded text-sm font-medium transition-colors ${
+                      activeTab === 'json'
+                          ? 'bg-white text-blue-600 shadow-sm'
+                          : 'text-gray-600 hover:text-gray-800'
+                  }`}
               >
                 JSON Schema
               </button>
             </div>
           </div>
-          
+
           <div className="flex items-center space-x-2">
             <button
-              onClick={() => handleCopy(currentContent)}
-              className="flex items-center space-x-2 px-3 py-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+                onClick={() => handleCopy(currentContent)}
+                className="flex items-center space-x-2 px-3 py-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
             >
-              {copied ? <Check size={16} /> : <Copy size={16} />}
+              {copied ? <Check size={16}/> : <Copy size={16}/>}
               <span>{copied ? 'Copied!' : 'Copy'}</span>
             </button>
             <button
-              onClick={() => handleDownload(currentContent, currentFilename, currentMimeType)}
-              className="flex items-center space-x-2 px-3 py-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+                onClick={() => handleDownload(currentContent, currentFilename, currentMimeType)}
+                className="flex items-center space-x-2 px-3 py-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
             >
-              <Download size={16} />
+              <Download size={16}/>
               <span>Download</span>
             </button>
             <button
-              onClick={onClose}
-              className="p-1 text-gray-400 hover:text-gray-600 rounded"
+                onClick={onClose}
+                className="p-1 text-gray-400 hover:text-gray-600 rounded"
             >
-              <X size={20} />
+              <X size={20}/>
             </button>
           </div>
         </div>
 
         <div className="flex-1 p-4">
           <div className="h-full border border-gray-300 rounded-lg">
-            <pre className="h-full p-4 overflow-auto bg-gray-50 rounded-lg font-mono text-sm">
+            <pre className="h-80 p-4 overflow-y-auto bg-gray-50 rounded-lg font-mono text-sm">
               <code>{currentContent}</code>
             </pre>
           </div>
@@ -113,8 +113,8 @@ export const ExportPanel: React.FC<ExportPanelProps> = ({
             {activeTab === 'sql' ? 'SQL DDL' : 'JSON Schema'} • {currentContent.split('\n').length} lines
           </div>
           <button
-            onClick={onClose}
-            className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
+              onClick={onClose}
+              className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
           >
             Close
           </button>
