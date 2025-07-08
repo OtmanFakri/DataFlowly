@@ -14,14 +14,17 @@ import {
     GitBranch,
     Eye
 } from 'lucide-react';
-
+import { useNavigate } from 'react-router-dom'
 
 export const LandingPage = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [activeTestimonial, setActiveTestimonial] = useState(0);
+    const navigate = useNavigate();
     const onGetStarted = () => {
         // For now, just log or redirect to a signup page
         console.log("Get Started clicked");
+        navigate('/dashboard');
+
         // You can replace this with your actual navigation logic
     };
     const features = [
