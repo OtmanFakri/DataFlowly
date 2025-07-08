@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { auth, googleProvider } from '../utils/config';
+import {auth, db, googleProvider} from '../utils/config';
 import { signInWithPopup } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
-
+import { doc, setDoc,getDoc } from 'firebase/firestore';
 const LoginPage: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -13,14 +13,22 @@ const LoginPage: React.FC = () => {
     setError(null);
     try {
       const result = await signInWithPopup(auth, googleProvider);
-      // Redirect to dashboard after successful login
+      const user = result.user;
+
+      const userDocRef = doc(db, 'users', user.uid);
+      const userDocSnap = await getDoc(userDocRef);
+
+      if (!userDocSnap.exists()) {
+        await setDoc(userDocRef, { point: 50 });
+      }
+
       navigate('/dashboard');
     } catch (err: any) {
       setError(err.message || 'Sign in failed');
     } finally {
       setLoading(false);
     }
-  };
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
