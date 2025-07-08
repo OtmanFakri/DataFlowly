@@ -34,6 +34,12 @@ function App() {
   const [showPropertyPanel, setShowPropertyPanel] = useState(false);
   const [showChatAI, setShowChatAI] = useState(false);
 
+  const [chatJsonSchema, setChatJsonSchema] = useState<any | null>(null);
+  const handleChatJsonUpdate = useCallback((jsonSchema: any) => {
+    // setChatJsonSchema(jsonSchema);
+    importSchema(jsonSchema);
+  }, [importSchema]);
+
   const handleAddTable = useCallback(() => {
     // Add table at center of viewport
     const tableId = addTable({ x: 100, y: 100 });
@@ -121,7 +127,7 @@ function App() {
 
         <div className="flex-1 flex">
           <DatabaseFlow
-              schema={schema}
+              schema={chatJsonSchema ?? schema}
               onTableUpdate={updateTable}
               onColumnUpdate={updateColumn}
               onAddColumn={addColumn}
@@ -152,6 +158,7 @@ function App() {
               <ChatAI
                   schema={schema}
                   onClose={() => setShowChatAI(false)}
+                  onJsonResponse={handleChatJsonUpdate}
               />
           )}
         </div>
