@@ -21,7 +21,7 @@ import {signOut} from 'firebase/auth';
 import {useNavigate} from "react-router-dom";
 import {auth, db} from "../utils/config.ts";
 import {collection, doc, getDoc, serverTimestamp, setDoc} from 'firebase/firestore';
-import {createDiagram, Diagram, getAllDiagrams} from "../utils/Digrammes.ts";
+import {Diagram, getAllDiagrams} from "../utils/Digrammes.ts";
 
 type NewDiagramInput = {
     name: string;
@@ -101,12 +101,12 @@ export const DashboardPage = () => {
                 updatedAt: now,
                 userId: user.uid,
                 schema: {
-                  database: {
-                    name: 'New Database',
-                    engine: 'mysql',
-                    tables: [],
-                    relationships: []
-                  }
+                    database: {
+                        name: 'New Database',
+                        engine: 'mysql',
+                        tables: [],
+                        relationships: []
+                    }
                 },
             };
 
@@ -114,7 +114,7 @@ export const DashboardPage = () => {
 
             // Refresh diagrams list after creation
             const updatedDiagrams = await getAllDiagrams(user.uid);
-                        setDiagrams(updatedDiagrams);
+            setDiagrams(updatedDiagrams);
             setShowCreateModal(false);
             setNewDiagram({
                 name: '',

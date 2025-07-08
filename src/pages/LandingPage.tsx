@@ -1,8 +1,7 @@
-import React, {useState, useEffect} from 'react';
+import {useState, useEffect} from 'react';
 import {
     Database,
     ArrowRight,
-    Check,
     Star,
     MessageCircle,
     Code,
@@ -16,14 +15,15 @@ import {
     Eye
 } from 'lucide-react';
 
-interface LandingPageProps {
-    onGetStarted: () => void;
-}
 
-export const LandingPage: React.FC<LandingPageProps> = ({onGetStarted}) => {
+export const LandingPage = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [activeTestimonial, setActiveTestimonial] = useState(0);
-
+    const onGetStarted = () => {
+        // For now, just log or redirect to a signup page
+        console.log("Get Started clicked");
+        // You can replace this with your actual navigation logic
+    };
     const features = [
         {
             icon: <Database className="w-8 h-8"/>,
@@ -287,9 +287,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({onGetStarted}) => {
                     <div className="flex justify-center">
                         <div className="bg-white rounded-2xl shadow-xl p-8 max-w-md w-full">
                             <div className="flex flex-col items-center mb-6">
-                                <Sparkles className="w-12 h-12 text-blue-500 mb-2" />
+                                <Sparkles className="w-12 h-12 text-blue-500 mb-2"/>
                                 <h3 className="text-2xl font-bold text-gray-900 mb-2">Buy AI Points</h3>
-                                <p className="text-gray-600 mb-4 text-center">Enter the number of points you want to buy. Minimum 200 points.</p>
+                                <p className="text-gray-600 mb-4 text-center">Enter the number of points you want to
+                                    buy. Minimum 200 points.</p>
                                 <input
                                     type="number"
                                     min={200}

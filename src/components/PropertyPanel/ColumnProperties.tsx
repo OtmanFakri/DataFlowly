@@ -68,40 +68,40 @@ export const ColumnProperties: React.FC<ColumnPropertiesProps> = ({
         </div>
 
         {requiresLength && (
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Length
-            </label>
-            <input
-              type="number"
-              value={column.length || ''}
-              onChange={(e) => onUpdate({ length: parseInt(e.target.value) || undefined })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            />
-          </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Length
+              </label>
+              <input
+                  type="number"
+                  value={column.length ?? ''}
+                  onChange={(e) => onUpdate({length: parseInt(e.target.value) || undefined})}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
         )}
 
         {requiresPrecision && (
-          <div className="grid grid-cols-2 gap-2">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Precision
-              </label>
-              <input
-                type="number"
-                value={column.precision || ''}
-                onChange={(e) => onUpdate({ precision: parseInt(e.target.value) || undefined })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Scale
-              </label>
-              <input
-                type="number"
-                value={column.scale !== undefined ? column.scale : ''}
-                onChange={(e) => onUpdate({ scale: e.target.value !== '' ? parseInt(e.target.value) : undefined })}
+            <div className="grid grid-cols-2 gap-2">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Precision
+                </label>
+                <input
+                    type="number"
+                    value={column.precision ?? ''}
+                    onChange={(e) => onUpdate({precision: parseInt(e.target.value) || undefined})}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Scale
+                </label>
+                <input
+                    type="number"
+                    value={column.scale !== undefined ? column.scale : ''}
+                    onChange={(e) => onUpdate({scale: e.target.value !== '' ? parseInt(e.target.value) : undefined })}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             </div>
@@ -113,11 +113,11 @@ export const ColumnProperties: React.FC<ColumnPropertiesProps> = ({
             Default Value
           </label>
           <input
-            type="text"
-            value={column.defaultValue || ''}
-            onChange={(e) => onUpdate({ defaultValue: e.target.value || undefined })}
-            placeholder="Leave empty for no default"
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              type="text"
+              value={column.defaultValue ?? ''}
+              onChange={(e) => onUpdate({defaultValue: e.target.value || undefined})}
+              placeholder="Leave empty for no default"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           />
         </div>
 
@@ -126,25 +126,25 @@ export const ColumnProperties: React.FC<ColumnPropertiesProps> = ({
             Comment
           </label>
           <textarea
-            value={column.comment || ''}
-            onChange={(e) => onUpdate({ comment: e.target.value || undefined })}
-            rows={2}
-            placeholder="Optional column comment..."
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+              value={column.comment ?? ''}
+              onChange={(e) => onUpdate({comment: e.target.value || undefined})}
+              rows={2}
+              placeholder="Optional column comment..."
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
           />
         </div>
       </div>
 
       <div className="space-y-3">
         <h4 className="font-medium text-gray-800">Constraints</h4>
-        
+
         <div className="space-y-2">
           <label className="flex items-center">
             <input
-              type="checkbox"
-              checked={!column.nullable}
-              onChange={(e) => onUpdate({ nullable: !e.target.checked })}
-              className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                type="checkbox"
+                checked={!column.nullable}
+                onChange={(e) => onUpdate({nullable: !e.target.checked})}
+                className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
             />
             <span className="ml-2 text-sm">NOT NULL</span>
           </label>

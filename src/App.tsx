@@ -8,7 +8,7 @@ import {ExportPanel} from './components/ExportPanel/ExportPanel';
 import {DatabaseEngine} from './types/database';
 import {ChatAI} from "./components/Chat/ChatAI.tsx";
 import {useParams} from 'react-router-dom';
-import {getDiagramById, getDiagramSchemaById, updateDiagramSchema} from './utils/Digrammes';
+import {getDiagramSchemaById, updateDiagramSchema} from './utils/Digrammes';
 
 function App() {
     const {

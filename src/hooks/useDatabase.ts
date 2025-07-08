@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import { DatabaseSchema, DatabaseTable, DatabaseColumn, DatabaseRelationship } from '../types/database';
-import { Node, Edge, Connection } from 'reactflow';
+import {Connection } from 'reactflow';
 
 interface DatabaseState extends DatabaseSchema {
   selectedTableId?: string;
