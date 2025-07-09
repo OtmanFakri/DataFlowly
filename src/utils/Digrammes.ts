@@ -1,4 +1,4 @@
-import { doc, setDoc, serverTimestamp, collection, getDocs, query, where, getDoc } from 'firebase/firestore';
+import { doc, setDoc, serverTimestamp, collection, getDocs, query, where, getDoc, deleteDoc } from 'firebase/firestore';
 import {db} from "./config.ts";
 
 export interface Diagram {
@@ -16,20 +16,6 @@ export interface Diagram {
     userId?: string;
     schema?: any;
 }
-export async function createDiagram(diagram: Omit<Diagram, 'id' | 'createdAt' | 'updatedAt'>): Promise<string> {
-    const newDocRef = doc(db, 'diagrams', /* you can generate an id here or let Firestore generate */);
-    const now = serverTimestamp();
-
-    const diagramData = {
-        ...diagram,
-        createdAt: now,
-        updatedAt: now,
-    };
-
-    await setDoc(newDocRef, diagramData);
-
-    return newDocRef.id; // return the generated document ID
-}
 
 export async function getAllDiagrams(userId: string): Promise<Diagram[]> {
     const diagramsQuery = query(collection(db, 'diagrams'), where('userId', '==', userId));
@@ -45,23 +31,25 @@ export async function getAllDiagrams(userId: string): Promise<Diagram[]> {
     });
 }
 
-export async function getDiagramById(id: string): Promise<Diagram | null> {
+
+
+export async function deleteDiagramById(id: string): Promise<void> {
     const docRef = doc(db, 'diagrams', id);
-    const docSnap = await getDoc(docRef);
-    if (!docSnap.exists()) return null;
-    const data = docSnap.data();
-    return {
-        id: docSnap.id,
-        ...data,
-        createdAt: data.createdAt?.toDate ? data.createdAt.toDate() : undefined,
-        updatedAt: data.updatedAt?.toDate ? data.updatedAt.toDate() : undefined,
-    } as Diagram;
+    await deleteDoc(docRef);
 }
 
 
 export async function updateDiagramSchema(id: string, schema: any): Promise<void> {
+    const tables = schema?.database?.tables;
+    const relationships = schema?.database?.relationships;
+    const tableCount = Array.isArray(tables) ? tables.length : 0;
+    const relationshipCount = Array.isArray(relationships) ? relationships.length : 0;
     const docRef = doc(db, 'diagrams', id);
-    await setDoc(docRef, { schema }, { merge: true });
+    await setDoc(
+        docRef,
+        { schema, tableCount, relationshipCount, updatedAt: serverTimestamp() },
+        { merge: true }
+    );
 }
 export async function getDiagramSchemaById(id: string): Promise<any | null> {
     const docRef = doc(db, 'diagrams', id);

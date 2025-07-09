@@ -15,19 +15,46 @@ import {
     Bot,
     ChevronDown,
     MoreVertical,
-    Import,
+    Import, Trash2,
 } from 'lucide-react';
 import {signOut} from 'firebase/auth';
 import {useNavigate} from "react-router-dom";
 import {auth, db} from "../utils/config.ts";
 import {collection, doc, getDoc, serverTimestamp, setDoc} from 'firebase/firestore';
-import {Diagram, getAllDiagrams} from "../utils/Digrammes.ts";
+import {deleteDiagramById, Diagram, getAllDiagrams} from "../utils/Digrammes.ts";
 
 type NewDiagramInput = {
     name: string;
     description: string;
     engine: 'mysql' | 'postgresql' | 'sqlserver';
 };
+
+// ConfirmationModal component
+function ConfirmationModal({ open, title, message, onCancel, onConfirm }: { open: boolean, title?: string, message: string, onCancel: () => void, onConfirm: () => void }) {
+    if (!open) return null;
+    return (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
+            <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-sm">
+                {title && <h2 className="text-lg font-semibold mb-2">{title}</h2>}
+                <p className="mb-6 text-gray-700">{message}</p>
+                <div className="flex justify-end space-x-2">
+                    <button
+                        onClick={onCancel}
+                        className="px-4 py-2 rounded bg-gray-200 hover:bg-gray-300"
+                    >
+                        Cancel
+                    </button>
+                    <button
+                        onClick={onConfirm}
+                        className="px-4 py-2 rounded bg-red-600 text-white hover:bg-red-700"
+                    >
+                        Confirm
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
+}
 
 export const DashboardPage = () => {
     const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
@@ -40,6 +67,7 @@ export const DashboardPage = () => {
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [diagrams, setDiagrams] = useState<Diagram[]>([]);
     const [userInitials, setUserInitials] = useState('');
+    const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
 
     const [newDiagram, setNewDiagram] = useState<NewDiagramInput>({
         name: '',
@@ -197,22 +225,13 @@ export const DashboardPage = () => {
                         <button
                             onClick={(e) => {
                                 e.stopPropagation();
-                                // Toggle star
+                                if (diagram.id) {
+                                    setConfirmDeleteId(diagram.id);
+                                }
                             }}
-                            className={`p-1 rounded hover:bg-gray-100 transition-colors ${
-                                diagram.isStarred ? 'text-yellow-500' : 'text-gray-400'
-                            }`}
+                            className="p-1 rounded hover:bg-red-100 text-red-500 hover:text-red-700 transition-colors"
                         >
-                            <Star size={16} className={diagram.isStarred ? 'fill-current' : ''}/>
-                        </button>
-                        <button
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                // Show menu
-                            }}
-                            className="p-1 rounded hover:bg-gray-100 text-gray-400 hover:text-gray-600 transition-colors opacity-0 group-hover:opacity-100"
-                        >
-                            <MoreVertical size={16}/>
+                            <Trash2 size={16}/>
                         </button>
                     </div>
                 </div>
@@ -572,6 +591,24 @@ export const DashboardPage = () => {
                     </div>
                 </div>
             )}
+            {/* Confirmation Modal for delete */}
+            <ConfirmationModal
+                open={!!confirmDeleteId}
+                title="Delete Diagram"
+                message="Are you sure you want to delete this diagram? This action cannot be undone."
+                onCancel={() => setConfirmDeleteId(null)}
+                onConfirm={async () => {
+                    if (confirmDeleteId) {
+                        await deleteDiagramById(confirmDeleteId);
+                        setConfirmDeleteId(null);
+                        const user = auth.currentUser;
+            if (user) {
+                const updatedDiagrams = await getAllDiagrams(user.uid);
+                setDiagrams(updatedDiagrams);
+            }
+                    }
+                }}
+            />
         </div>
     );
 };
