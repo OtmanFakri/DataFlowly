@@ -33,7 +33,7 @@ const LoginPage: React.FC = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
       <div className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md text-center">
-        <h2 className="text-2xl font-bold mb-6 text-gray-900">Sign in to DatabasePro</h2>
+        <h2 className="text-2xl font-bold mb-6 text-gray-900">Sign in to DataFlowly</h2>
         <button
           onClick={handleGoogleSignIn}
           disabled={loading}

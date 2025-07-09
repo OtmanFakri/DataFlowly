@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
     Database,
     ArrowRight,
@@ -12,9 +12,10 @@ import {
     Sparkles,
     Bot,
     GitBranch,
-    Eye
+    Eye, FileText
 } from 'lucide-react';
-import { useNavigate } from 'react-router-dom'
+import {useNavigate} from 'react-router-dom'
+import { Link } from 'react-router-dom';
 
 export const LandingPage = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -57,12 +58,8 @@ export const LandingPage = () => {
             icon: <Eye className="w-8 h-8"/>,
             title: "Real-time Preview",
             description: "See your database structure come to life with interactive visual relationships."
-        }
+        },
     ];
-
-    // Add state for dynamic points and price
-    const [pointsToBuy, setPointsToBuy] = useState(200);
-    const price = ((pointsToBuy / 200) * 5).toFixed(2);
 
     const testimonials = [
         {
@@ -108,8 +105,8 @@ export const LandingPage = () => {
                             </div>
                             <span
                                 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-        DatabasePro
-        </span>
+                                DataFlowly
+                            </span>
                         </div>
 
                         {/* Desktop Navigation */}
@@ -120,6 +117,8 @@ export const LandingPage = () => {
                                className="text-gray-700 hover:text-blue-600 transition-colors">Pricing</a>
                             <a href="#testimonials"
                                className="text-gray-700 hover:text-blue-600 transition-colors">Reviews</a>
+                            <Link to="/terms"
+                                  className="text-gray-700 hover:text-blue-600 transition-colors">Terms</Link>
                             <button
                                 onClick={onGetStarted}
                                 className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-2 rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all duration-200 font-medium shadow-lg hover:shadow-xl"
@@ -149,6 +148,8 @@ export const LandingPage = () => {
                                    className="text-gray-700 hover:text-blue-600 transition-colors">Pricing</a>
                                 <a href="#testimonials"
                                    className="text-gray-700 hover:text-blue-600 transition-colors">Reviews</a>
+                                <Link to="/terms"
+                                      className="text-gray-700 hover:text-blue-600 transition-colors">Terms</Link>
                                 <button
                                     onClick={onGetStarted}
                                     className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-2 rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all duration-200 font-medium w-full"
@@ -288,38 +289,57 @@ export const LandingPage = () => {
 
                     {/* Dynamic Pricing Card */}
                     <div className="flex justify-center">
-                        <div className="bg-white rounded-2xl shadow-xl p-8 max-w-md w-full">
-                            <div className="flex flex-col items-center mb-6">
-                                <Sparkles className="w-12 h-12 text-blue-500 mb-2"/>
-                                <h3 className="text-2xl font-bold text-gray-900 mb-2">Buy AI Points</h3>
-                                <p className="text-gray-600 mb-4 text-center">Enter the number of points you want to
-                                    buy. Minimum 200 points.</p>
-                                <input
-                                    type="number"
-                                    min={200}
-                                    step={1}
-                                    value={pointsToBuy}
-                                    onChange={e => setPointsToBuy(Math.max(200, parseInt(e.target.value) || 200))}
-                                    className="w-32 px-4 py-2 border border-gray-300 rounded-lg text-center text-lg font-semibold mb-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-                                />
-                                <div className="text-green-600 font-semibold text-lg mb-2">
-                                    {pointsToBuy} AI Points
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl w-full">
+                            {/* 200 Points Package */}
+                            <div className="bg-white rounded-2xl shadow-xl p-6 border border-gray-200">
+                                <div className="text-center">
+                                    <div className="text-2xl font-bold text-gray-900 mb-2">200</div>
+                                    <div className="text-gray-600 mb-4">AI Points</div>
+                                    <div className="text-3xl font-bold text-gray-900 mb-4">$5.00</div>
+                                    <button
+                                        onClick={() => navigate('/buy-points')}
+                                        className="w-full py-3 px-6 rounded-xl font-semibold bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:from-blue-600 hover:to-purple-700 shadow-lg hover:shadow-xl transition-all duration-200"
+                                    >
+                                        Buy Now
+                                    </button>
                                 </div>
-                                <div className="text-3xl font-bold text-gray-900 mb-4">
-                                    ${price}
-                                </div>
-                                <button
-                                    onClick={onGetStarted}
-                                    className="w-full py-3 px-6 rounded-xl font-semibold bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:from-blue-600 hover:to-purple-700 shadow-lg hover:shadow-xl transition-all duration-200"
-                                >
-                                    Buy Now
-                                </button>
                             </div>
-                            <div className="bg-white rounded-2xl p-4 shadow border border-gray-200 text-center">
-                                <h3 className="text-lg font-semibold text-gray-900 mb-1">Simple & Transparent</h3>
-                                <p className="text-gray-600 text-sm">
-                                    No subscriptions • No monthly fees • Points never expire
-                                </p>
+
+                            {/* 500 Points Package */}
+                            <div className="bg-white rounded-2xl shadow-xl p-6 border-2 border-blue-500 relative">
+                                <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                                    <span className="bg-blue-500 text-white px-4 py-1 rounded-full text-sm font-medium">
+                                        Most Popular
+                                    </span>
+                                </div>
+                                <div className="text-center">
+                                    <div className="text-2xl font-bold text-gray-900 mb-2">500</div>
+                                    <div className="text-gray-600 mb-4">AI Points</div>
+                                    <div className="text-3xl font-bold text-gray-900 mb-2">$10.00</div>
+                                    <div className="text-green-600 text-sm font-medium mb-4">25% more points</div>
+                                    <button
+                                        onClick={() => navigate('/buy-points')}
+                                        className="w-full py-3 px-6 rounded-xl font-semibold bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:from-blue-600 hover:to-purple-700 shadow-lg hover:shadow-xl transition-all duration-200"
+                                    >
+                                        Buy Now
+                                    </button>
+                                </div>
+                            </div>
+
+                            {/* 1000 Points Package */}
+                            <div className="bg-white rounded-2xl shadow-xl p-6 border border-gray-200">
+                                <div className="text-center">
+                                    <div className="text-2xl font-bold text-gray-900 mb-2">1000</div>
+                                    <div className="text-gray-600 mb-4">AI Points</div>
+                                    <div className="text-3xl font-bold text-gray-900 mb-2">$18.00</div>
+                                    <div className="text-green-600 text-sm font-medium mb-4">40% more points</div>
+                                    <button
+                                        onClick={() => navigate('/buy-points')}
+                                        className="w-full py-3 px-6 rounded-xl font-semibold bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:from-blue-600 hover:to-purple-700 shadow-lg hover:shadow-xl transition-all duration-200"
+                                    >
+                                        Buy Now
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -334,7 +354,7 @@ export const LandingPage = () => {
                             Loved by Developers Worldwide
                         </h2>
                         <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                            See what our users are saying about DatabasePro
+                            See what our users are saying about DataFlowly
                         </p>
                     </div>
 
@@ -386,7 +406,7 @@ export const LandingPage = () => {
                     <div
                         className="flex flex-col items-center justify-center space-y-4">
                         <button
-                            onClick={onGetStarted}
+                            onClick={() => navigate('/buy-points')}
                             className="bg-white text-blue-600 px-8 py-4 rounded-xl hover:bg-gray-100 transition-all duration-200 font-semibold text-lg shadow-xl hover:shadow-2xl transform hover:-translate-y-1 flex items-center space-x-2"
                         >
                             <span>Get 50 Free Points</span>
@@ -400,9 +420,19 @@ export const LandingPage = () => {
             </section>
 
             {/* Footer */}
-            <footer className="bg-gray-900 text-white py-2">
-                <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-                    <p>&copy; 2024 DatabasePro. All rights reserved.</p>
+            <footer className="bg-gray-900 text-white py-8 ">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="flex flex-col md:flex-row justify-between items-center">
+                        <div className="flex items-center gap-3 mb-4 md:mb-0">
+                            <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-2 rounded-lg">
+                                <Database className="text-white" size={20}/>
+                            </div>
+                            <span className="font-semibold">DataFlowly</span>
+                        </div>
+                        <div className="text-sm text-gray-400">
+                            © 2025 DataFlowly. All rights reserved.
+                        </div>
+                    </div>
                 </div>
             </footer>
         </div>
