@@ -10,7 +10,7 @@ import {ChatAI} from "./components/Chat/ChatAI.tsx";
 import {useParams} from 'react-router-dom';
 import {getDiagramSchemaById, updateDiagramSchema} from './utils/Digrammes';
 import {auth, db} from './utils/config';
-import {doc, getDoc} from 'firebase/firestore';
+import {doc, onSnapshot} from 'firebase/firestore';
 
 function App() {
     const {
@@ -73,18 +73,24 @@ function App() {
     }, [id]);
 
     useEffect(() => {
-        const fetchPoints = async () => {
-            const user = auth.currentUser;
-            if (!user) return;
-            const userDocRef = doc(db, 'users', user.uid);
-            const userDocSnap = await getDoc(userDocRef);
-            if (userDocSnap.exists()) {
-                setUserPoints(userDocSnap.data().point ?? 0);
-            } else {
-                setUserPoints(0);
+        const unsubscribe = auth.onAuthStateChanged(user => {
+            if (!user) {
+                setUserPoints(null);
+                return;
             }
-        };
-        fetchPoints();
+            const userDocRef = doc(db, 'users', user.uid);
+            const unsubscribeSnapshot = onSnapshot(userDocRef, (docSnap) => {
+                if (docSnap.exists()) {
+                    setUserPoints(docSnap.data().point ?? 0);
+                } else {
+                    setUserPoints(0);
+                }
+            });
+            // Cleanup snapshot listener when user changes or component unmounts
+            return () => unsubscribeSnapshot();
+        });
+        // Cleanup auth listener on unmount
+        return () => unsubscribe();
     }, []);
 
 

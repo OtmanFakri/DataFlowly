@@ -10,6 +10,7 @@ import {BuyPointsPage} from "./pages/BuyPointsPage.tsx";
 import PaymentSuccessPage from "./pages/PaymentSuccessPage.tsx";
 import AuthGuard from "./components/AuthGuard.tsx";
 import TermsConditions from "./pages/TermsConditions.tsx";
+import Contact from "./pages/Contact.tsx";
 
 createRoot(document.getElementById('root')!).render(
     <StrictMode>
@@ -21,6 +22,7 @@ createRoot(document.getElementById('root')!).render(
                 <Route path="/dashboard" element={<DashboardPage/>}/>
                 <Route path="/buy-points" element={<BuyPointsPage/>}/>
                 <Route path="/terms" element={<TermsConditions/>}/>
+                <Route path="/contact" element={<Contact/>}/>
                 <Route path="/success" element={
                     <AuthGuard>
                         <PaymentSuccessPage/>
