@@ -9,6 +9,8 @@ import {DatabaseEngine} from './types/database';
 import {ChatAI} from "./components/Chat/ChatAI.tsx";
 import {useParams} from 'react-router-dom';
 import {getDiagramSchemaById, updateDiagramSchema} from './utils/Digrammes';
+import {auth, db} from './utils/config';
+import {doc, getDoc} from 'firebase/firestore';
 
 function App() {
     const {
@@ -36,6 +38,7 @@ function App() {
     const [loading, setLoading] = useState(true);
     const [notFound, setNotFound] = useState(false);
     const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'success' | 'error'>("idle");
+    const [userPoints, setUserPoints] = useState<number | null>(null);
 
     useEffect(() => {
         let isMounted = true;
@@ -68,6 +71,21 @@ function App() {
             isMounted = false;
         };
     }, [id]);
+
+    useEffect(() => {
+        const fetchPoints = async () => {
+            const user = auth.currentUser;
+            if (!user) return;
+            const userDocRef = doc(db, 'users', user.uid);
+            const userDocSnap = await getDoc(userDocRef);
+            if (userDocSnap.exists()) {
+                setUserPoints(userDocSnap.data().point ?? 0);
+            } else {
+                setUserPoints(0);
+            }
+        };
+        fetchPoints();
+    }, []);
 
 
     const [showJSONEditor, setShowJSONEditor] = useState(false);
@@ -179,21 +197,10 @@ function App() {
                 onRedo={redo}
                 canUndo={canUndo}
                 canRedo={canRedo}
-                databaseEngine={schema.database.engine}
-                onEngineChange={handleEngineChange}
+                onSave={handleSaveSchema}
+                saveStatus={saveStatus}
+                userPoints={userPoints}
             />
-            <div className="flex items-center space-x-4 px-4 py-2 bg-white border-b border-gray-200">
-                <button
-                    onClick={handleSaveSchema}
-                    className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
-                    disabled={saveStatus === 'saving'}
-                >
-                    {saveStatus === 'saving' ? 'Saving...' : 'Save Schema'}
-                </button>
-                {saveStatus === 'success' && <span className="text-green-600">Saved!</span>}
-                {saveStatus === 'error' && <span className="text-red-600">Error saving</span>}
-            </div>
-
             <div className="flex-1 flex">
                 <DatabaseFlow
                     schema={chatJsonSchema ?? schema}

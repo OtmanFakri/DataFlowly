@@ -195,7 +195,7 @@ export const ColumnProperties: React.FC<ColumnPropertiesProps> = ({
 
       <div className="border-t pt-4">
         <button
-          onClick={onDelete}
+          onClick={() => onDelete()}
           className="flex items-center space-x-2 px-3 py-2 text-red-600 hover:bg-red-50 rounded-lg w-full justify-center transition-colors"
         >
           <Trash2 size={16} />

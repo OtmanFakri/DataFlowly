@@ -1,6 +1,7 @@
 import {useState, useCallback} from 'react';
 import {GoogleGenAI, Type} from '@google/genai';
 import {responseSchema} from "../utils/schemaResponse.ts";
+import {Systemprompt} from "../utils/utils.ts";
 
 // IMPORTANT: Store your Gemini API key in an environment variable for security.
 // For Vite, use VITE_GEMINI_API_KEY in your .env file.
@@ -31,16 +32,16 @@ export function useGeminiAI() {
             setLoading(true);
             setError(null);
             setResponse(null);
-            const fullPrompt = history && Object.keys(history).length > 0
-                ? `${JSON.stringify(history)}\n${prompt}`
-                : prompt;
+            const fullPrompt = "\n" + JSON.stringify(history) + "\n" + prompt;
             try {
                 const res = await ai.models.generateContent({
                     model: options.model || 'gemini-2.5-flash',
                     contents: fullPrompt,
                     config: {
                         responseMimeType: 'application/json',
+                        systemInstruction: Systemprompt,
                         responseSchema: responseSchema,
+                        temperature: 0.1,
                     },
                 });
                 let json;

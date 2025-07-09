@@ -140,6 +140,7 @@ export const useDatabase = () => {
   }, [updateTable]);
 
   const deleteColumn = useCallback((tableId: string, columnId: string) => {
+
     const table = state.database.tables.find(t => t.id === tableId);
     if (!table) return;
 
@@ -149,13 +150,16 @@ export const useDatabase = () => {
     );
 
     updateTable(tableId, { columns: updatedColumns });
-    updateDatabase({
+
+    setState(prev => ({
+      ...prev,
       database: {
-        ...state.database,
+        ...prev.database,
         relationships: updatedRelationships
-      }
-    });
-  }, [state, updateTable, updateDatabase]);
+      },
+      selectedColumnId: prev.selectedColumnId === columnId ? undefined : prev.selectedColumnId
+    }));
+  }, [state, updateTable]);
 
   const addRelationship = useCallback((connection: Connection) => {
     if (!connection.source || !connection.target || !connection.sourceHandle || !connection.targetHandle) {

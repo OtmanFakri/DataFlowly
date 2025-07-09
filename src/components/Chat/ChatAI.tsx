@@ -1,6 +1,8 @@
 import React, {useState, useRef, useEffect} from 'react';
 import {X, Send, Bot, User, Loader2, FileJson} from 'lucide-react';
 import {useGeminiAI} from '../../hooks/useGeminiAI';
+import { auth, db } from '../../utils/config';
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
 
 interface Message {
     id: string;
@@ -29,24 +31,55 @@ export const ChatAI: React.FC<ChatAIProps> = ({onClose, schema,onJsonResponse}) 
     const [isLoading, setIsLoading] = useState(false);
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLTextAreaElement>(null);
+    const [points, setPoints] = useState<number | null>(null);
+    const [pointError, setPointError] = useState<string | null>(null);
 
     const {sendMessage, loading: aiLoading, error: aiError} = useGeminiAI();
 
-    const scrollToBottom = () => {
-        messagesEndRef.current?.scrollIntoView({behavior: 'smooth'});
-    };
+
 
     useEffect(() => {
-        scrollToBottom();
-    }, [messages]);
-
-    useEffect(() => {
-        // Focus input when component mounts
-        inputRef.current?.focus();
+        const fetchPoints = async () => {
+            const user = auth.currentUser;
+            if (!user) return;
+            const userDocRef = doc(db, 'users', user.uid);
+            const userDocSnap = await getDoc(userDocRef);
+            if (userDocSnap.exists()) {
+                setPoints(userDocSnap.data().point ?? 0);
+            } else {
+                setPoints(0);
+            }
+        };
+        fetchPoints();
     }, []);
 
     const handleSendMessage = async () => {
         if (!inputMessage.trim() || isLoading) return;
+        setPointError(null);
+
+        if (points === null) {
+            setPointError('Loading your points...');
+            return;
+        }
+        if (points < 10) {
+            setPointError('Not enough points. Please buy more to continue using the AI.');
+            return;
+        }
+
+        // Deduct points in Firestore
+        const user = auth.currentUser;
+        if (!user) {
+            setPointError('You must be signed in.');
+            return;
+        }
+        const userDocRef = doc(db, 'users', user.uid);
+        try {
+            await updateDoc(userDocRef, { point: points - 10 });
+            setPoints(points - 10);
+        } catch (e) {
+            setPointError('Failed to deduct points. Please try again.');
+            return;
+        }
 
         const userMessage: Message = {
             id: Date.now().toString(),
@@ -64,6 +97,32 @@ export const ChatAI: React.FC<ChatAIProps> = ({onClose, schema,onJsonResponse}) 
                 inputMessage.trim(),
                 schema
             );
+            console.log('Gemini AI Response:', aiResponseJson)
+
+            // Check if response is DatabaseState
+            const isDatabaseState =
+                aiResponseJson &&
+                typeof aiResponseJson === 'object' &&
+                aiResponseJson.database &&
+                typeof aiResponseJson.database === 'object' &&
+                typeof aiResponseJson.database.name === 'string' &&
+                typeof aiResponseJson.database.engine === 'string' &&
+                Array.isArray(aiResponseJson.database.tables) &&
+                Array.isArray(aiResponseJson.database.relationships);
+
+            if (!isDatabaseState) {
+                // Not a valid DatabaseState, show error message
+                setMessages(prev => [
+                    ...prev,
+                    {
+                        id: (Date.now() + 1).toString(),
+                        type: 'ai',
+                        content: 'PLEASE TRY AGAIN',
+                        timestamp: new Date()
+                    }
+                ]);
+                return;
+            }
 
             let aiContent = '';
             let isJson = false;
@@ -112,7 +171,7 @@ export const ChatAI: React.FC<ChatAIProps> = ({onClose, schema,onJsonResponse}) 
     };
 
     return (
-        <div className="w-96 bg-white border-l border-gray-200 flex flex-col shadow-lg">
+        <div className="w-96 hyphens-auto bg-white border-l border-gray-200 flex flex-col shadow-lg">
             {/* Header */}
             <div className="p-4 border-b border-gray-200 flex items-center justify-between bg-gray-50">
                 <div className="flex items-center space-x-2">
@@ -132,6 +191,9 @@ export const ChatAI: React.FC<ChatAIProps> = ({onClose, schema,onJsonResponse}) 
 
             {/* Messages */}
             <div className="flex-1 overflow-y-auto p-4 space-y-3">
+                {pointError && (
+                    <div className="text-red-500 text-xs mb-2">{pointError}</div>
+                )}
                 {messages.map((message) => (
                     <div
                         key={message.id}
