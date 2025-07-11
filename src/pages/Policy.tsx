@@ -378,7 +378,8 @@ function Policy() {
                                     </div>
                                     <div className="mt-6 bg-gray-100 p-4 rounded-lg">
                                         <p className="text-gray-700 text-sm">
-                                            To exercise these rights, contact us at <a href="mailto:otmanhero00@gmail.com" className="text-blue-600 hover:underline">privacy@dataflowly.com</a>. We will respond within 30 days of receiving your request.
+                                            To exercise these rights, contact us at <a href="mailto:otmanhero00@gmail.com" className="text-blue-600 hover:underline">otmanhero00@gmail.com</a>. We will respond within 30 days of receiving your request.
+
                                         </p>
                                     </div>
                                 </section>
