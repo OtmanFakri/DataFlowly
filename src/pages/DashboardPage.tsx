@@ -15,13 +15,14 @@ import {
     Bot,
     ChevronDown,
     MoreVertical,
-    Import, Trash2,
+    Trash2,
 } from 'lucide-react';
 import {signOut} from 'firebase/auth';
 import {useNavigate} from "react-router-dom";
 import {auth, db} from "../utils/config.ts";
 import {collection, doc, getDoc, serverTimestamp, setDoc} from 'firebase/firestore';
 import {deleteDiagramById, Diagram, getAllDiagrams} from "../utils/Digrammes.ts";
+import SettingsModal from "./SettingsModel.tsx";
 
 type NewDiagramInput = {
     name: string;
@@ -30,7 +31,13 @@ type NewDiagramInput = {
 };
 
 // ConfirmationModal component
-function ConfirmationModal({ open, title, message, onCancel, onConfirm }: { open: boolean, title?: string, message: string, onCancel: () => void, onConfirm: () => void }) {
+function ConfirmationModal({open, title, message, onCancel, onConfirm}: {
+    open: boolean,
+    title?: string,
+    message: string,
+    onCancel: () => void,
+    onConfirm: () => void
+}) {
     if (!open) return null;
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
@@ -68,6 +75,7 @@ export const DashboardPage = () => {
     const [diagrams, setDiagrams] = useState<Diagram[]>([]);
     const [userInitials, setUserInitials] = useState('');
     const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
+    const [showSettingsModal, setShowSettingsModal] = useState<boolean>(false);
 
     const [newDiagram, setNewDiagram] = useState<NewDiagramInput>({
         name: '',
@@ -397,11 +405,11 @@ export const DashboardPage = () => {
                                 {showUserMenu && (
                                     <div
                                         className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-50">
-                                        <a href="#"
-                                           className="flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                        <button onClick={()=>setShowSettingsModal(true)}
+                                           className="flex w-full items-center space-x-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                             <Settings size={16}/>
                                             <span>Settings</span>
-                                        </a>
+                                        </button>
                                         <a href="#"
                                            className="flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                             <Bot size={16}/>
@@ -602,13 +610,21 @@ export const DashboardPage = () => {
                         await deleteDiagramById(confirmDeleteId);
                         setConfirmDeleteId(null);
                         const user = auth.currentUser;
-            if (user) {
-                const updatedDiagrams = await getAllDiagrams(user.uid);
-                setDiagrams(updatedDiagrams);
-            }
+                        if (user) {
+                            const updatedDiagrams = await getAllDiagrams(user.uid);
+                            setDiagrams(updatedDiagrams);
+                        }
                     }
                 }}
             />
+            {
+                showSettingsModal && (
+                    <SettingsModal
+                        isOpen={showSettingsModal}
+                        onClose={() => setShowSettingsModal(false)}
+                    />
+                )
+            }
         </div>
     );
 };
