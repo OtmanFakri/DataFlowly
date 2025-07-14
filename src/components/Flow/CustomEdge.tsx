@@ -1,5 +1,5 @@
 import React from 'react';
-import { EdgeProps, getBezierPath, EdgeLabelRenderer } from 'reactflow';
+import { EdgeProps, getSmoothStepPath, EdgeLabelRenderer } from 'reactflow';
 
 const CustomEdge = ({
   id,
@@ -13,7 +13,7 @@ const CustomEdge = ({
   data,
   selected
 }: EdgeProps) => {
-  const [edgePath, labelX, labelY] = getBezierPath({
+  const [edgePath, labelX, labelY] = getSmoothStepPath({
     sourceX,
     sourceY,
     sourcePosition,
