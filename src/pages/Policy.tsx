@@ -14,7 +14,8 @@ import {
     FileText,
     Mail,
     Clock,
-    ArrowUp
+    ArrowUp,
+    DollarSign
 } from 'lucide-react';
 import SettingsModal from "./SettingsModel.tsx";
 import Navigation from "../components/Navigation.tsx";
@@ -74,7 +75,7 @@ function Policy() {
         { id: 'data-retention', title: 'Data Retention', icon: Clock },
         { id: 'international', title: 'International Transfers', icon: Server },
         { id: 'updates', title: 'Policy Updates', icon: FileText },
-        // { id: 'contact-privacy', title: 'Contact Us', icon: Mail }
+        { id: 'refund-policy', title: 'Refund Policy', icon: DollarSign }
     ];
 
     return (
@@ -379,7 +380,6 @@ function Policy() {
                                     <div className="mt-6 bg-gray-100 p-4 rounded-lg">
                                         <p className="text-gray-700 text-sm">
                                             To exercise these rights, contact us at <a href="mailto:otmanhero00@gmail.com" className="text-blue-600 hover:underline">otmanhero00@gmail.com</a>. We will respond within 30 days of receiving your request.
-
                                         </p>
                                     </div>
                                 </section>
@@ -460,39 +460,77 @@ function Policy() {
                                     </div>
                                 </section>
 
-                                {/* Contact Information */}
-                                {/*<section id="contact-privacy" className="scroll-mt-24">*/}
-                                {/*    <div className="flex items-center gap-3 mb-6">*/}
-                                {/*        <div className="bg-gray-100 p-2 rounded-lg">*/}
-                                {/*            <Mail className="text-gray-600" size={24} />*/}
-                                {/*        </div>*/}
-                                {/*        <h2 className="text-2xl font-bold text-gray-900">Contact Us About Privacy</h2>*/}
-                                {/*    </div>*/}
-                                {/*    <div className="bg-gray-50 p-6 rounded-lg border border-gray-200">*/}
-                                {/*        <p className="text-gray-700 mb-4">*/}
-                                {/*            If you have questions, concerns, or requests regarding this Privacy Policy or our data practices, please contact us:*/}
-                                {/*        </p>*/}
-                                {/*        <div className="grid md:grid-cols-2 gap-6">*/}
-                                {/*            <div>*/}
-                                {/*                <h3 className="font-semibold text-gray-900 mb-2">Privacy Officer</h3>*/}
-                                {/*                <p className="text-gray-700 text-sm">*/}
-                                {/*                    Email: <a href="mailto:privacy@dataflowly.com" className="text-blue-600 hover:underline">privacy@dataflowly.com</a><br />*/}
-                                {/*                    Phone: +1 (555) 123-4567<br />*/}
-                                {/*                    Response Time: Within 48 hours*/}
-                                {/*                </p>*/}
-                                {/*            </div>*/}
-                                {/*            <div>*/}
-                                {/*                <h3 className="font-semibold text-gray-900 mb-2">Mailing Address</h3>*/}
-                                {/*                <p className="text-gray-700 text-sm">*/}
-                                {/*                    DataFlowly Privacy Team<br />*/}
-                                {/*                    123 Tech Street, Suite 100<br />*/}
-                                {/*                    San Francisco, CA 94105<br />*/}
-                                {/*                    United States*/}
-                                {/*                </p>*/}
-                                {/*            </div>*/}
-                                {/*        </div>*/}
-                                {/*    </div>*/}
-                                {/*</section>*/}
+                                {/* Refund Policy */}
+                                <section id="refund-policy" className="scroll-mt-24">
+                                    <div className="flex items-center gap-3 mb-6">
+                                        <div className="bg-blue-100 p-2 rounded-lg">
+                                            <DollarSign className="text-blue-600" size={24} />
+                                        </div>
+                                        <h2 className="text-2xl font-bold text-gray-900">Refund Policy</h2>
+                                    </div>
+                                    <div className="space-y-6">
+                                        <div className="bg-gray-50 p-6 rounded-lg">
+                                            <h3 className="text-lg font-semibold text-gray-900 mb-3">Refund Eligibility</h3>
+                                            <p className="text-gray-700 mb-4">
+                                                You may be eligible for a refund under the following circumstances:
+                                            </p>
+                                            <ul className="space-y-2 text-gray-700">
+                                                <li>• <strong>Service Not Rendered:</strong> If our service fails to generate an ER diagram due to a technical issue on our end.</li>
+                                                <li>• <strong>Duplicate Charges:</strong> If you were charged multiple times for the same transaction due to an error.</li>
+                                                <li>• <strong>Unauthorized Charges:</strong> If a charge was made without your authorization (subject to verification).</li>
+                                                <li>• <strong>Non-Delivery of Points:</strong> If purchased points were not credited to your account within 24 hours of payment.</li>
+                                            </ul>
+                                        </div>
+                                        <div className="bg-gray-50 p-6 rounded-lg">
+                                            <h3 className="text-lg font-semibold text-gray-900 mb-3">Non-Refundable Cases</h3>
+                                            <p className="text-gray-700 mb-4">
+                                                Refunds will not be provided in the following cases:
+                                            </p>
+                                            <ul className="space-y-2 text-gray-700">
+                                                <li>• <strong>User Dissatisfaction:</strong> If you are dissatisfied with the generated ER diagram but the service was provided as described.</li>
+                                                <li>• <strong>Points Usage:</strong> If points purchased have been used to generate ER diagrams or access other services.</li>
+                                                <li>• <strong>Change of Mind:</strong> If you no longer wish to use our services after a successful transaction.</li>
+                                                <li>• <strong>Violation of Terms:</strong> If your account was terminated due to a violation of our Terms and Conditions.</li>
+                                            </ul>
+                                        </div>
+                                        <div className="bg-gray-50 p-6 rounded-lg">
+                                            <h3 className="text-lg font-semibold text-gray-900 mb-3">Refund Process</h3>
+                                            <p className="text-gray-700 mb-4">
+                                                To request a refund, please follow these steps:
+                                            </p>
+                                            <ul className="space-y-2 text-gray-700">
+                                                <li>• <strong>Contact Us:</strong> Email us at <a href="mailto:oo99otman@gmail.com" className="text-blue-600 hover:underline">oo99otman@gmail.com</a> with your account details and transaction ID.</li>
+                                                <li>• <strong>Provide Details:</strong> Include a brief explanation of why you are requesting a refund.</li>
+                                                <li>• <strong>Review Period:</strong> We will review your request within 7 business days and respond with our decision.</li>
+                                                <li>• <strong>Processing Time:</strong> Approved refunds will be processed within 14 business days to the original payment method.</li>
+                                            </ul>
+                                        </div>
+                                        <div className="bg-gray-50 p-6 rounded-lg">
+                                            <h3 className="text-lg font-semibold text-gray-900 mb-3">Contact Us About Refunds</h3>
+                                            <p className="text-gray-700 mb-4">
+                                                If you have questions or need assistance with a refund, please reach out to us:
+                                            </p>
+                                            <div className="grid md:grid-cols-2 gap-6">
+                                                <div>
+                                                    <h4 className="font-semibold text-gray-900 mb-2">Support Team</h4>
+                                                    <p className="text-gray-700 text-sm">
+                                                        Email: <a href="mailto:oo99otman@gmail.com" className="text-blue-600 hover:underline">oo99otman@gmail.com</a><br />
+                                                        Response Time: Within 48 hours
+                                                    </p>
+                                                </div>
+                                                {/* <div>
+                                                    <h4 className="font-semibold text-gray-900 mb-2">Mailing Address</h4>
+                                                    <p className="text-gray-700 text-sm">
+                                                        DataFlowly Support Team<br />
+                                                        123 Tech Street, Suite 100<br />
+                                                        San Francisco, CA 94105<br />
+                                                        United States
+                                                    </p>
+                                                </div> */}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
                             </div>
                         </div>
                     </div>
